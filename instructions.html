@@ -1,0 +1,595 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>LLN - Instructions</title>
+    <meta name="description" content="Language Learning with Netflix - Instructions">
+    <meta name="author" content="LLN">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="lln-logo-small.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Maiden+Orange|Roboto:400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        color: #333;
+        overflow-y: scroll;
+        padding: 40px;
+        margin: 0;
+        box-sizing: border-box;
+        font-size: 17px;
+    }
+    .page-wrap {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    table, tr, td, th {
+        border: 1px solid #ddd;
+        border-collapse: collapse;
+    }
+    h2 {
+        margin-top: 30px;
+    }
+    td, th {
+        padding: 10px;
+    }
+    .title {
+        font-weight: bold;
+    }
+    .title a {
+        text-decoration: none;
+        color: black;
+    }
+    .main-title {
+        display: flex;
+        flex-direction: column;
+    }
+    @media (min-width: 1100px) {
+        .main-title {
+            flex-direction: row;
+            align-items: center;
+        }
+        .main-title h1 {
+            flex-grow: 1;
+        }
+        .main-title iframe {
+            flex-grow: 0;
+        }
+    }
+    .synopsis a {
+        text-decoration: none;
+        color: black;
+    }
+    .filters {
+        margin: 30px 0 20px;
+        display: flex;
+        align-items: center;
+    }
+    select {
+        padding: 10px 15px;
+        margin-right: 10px;
+        width: 180px;
+    }
+    .results-count {
+        margin-left: 14px;
+    }
+    .center {
+        text-align: center;
+    }
+    .mt10 {
+        margin-top: 10px;
+    }
+    h1 {
+            font-size: 43px;
+            font-weight: 500;
+            font-family: "Maiden Orange";
+            display: flex;
+            align-items: center;
+            color: #666;
+            margin-top: 10px;
+    }
+    .logo { 
+        width: 48px;
+        height: auto;
+        margin-right: 15px;
+        position: relative;
+        top: 3px;
+    }
+    .info-baloon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 17px;
+        box-sizing: border-box;
+    }
+    .button-raised {
+        box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+        padding: 11px 17px 11px 24px;
+        border-radius: 4px;
+        transition: background .2s;
+        cursor: pointer;
+        display: inline-block;
+    }
+    .button-raised:hover {
+        background: #f7f7f7;
+    }
+    .heading-link a {
+        font-size: 22px;
+        color: #c3819c;
+    }
+    .lang-select {
+        float: right;
+        width: 150px;
+        border-radius: 6px;
+        padding-left: 33px;
+    }
+    .lang-select-icon {
+        float: right;
+        padding: 8px 0;
+        opacity: .5;
+        position: relative;
+        left: 31px;
+        pointer-events: none;
+    }
+    [v-cloak] {display: none}
+</style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132852687-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-132852687-1');
+    </script>
+    <!-- end Google Analytics -->
+
+</head>
+
+<body>
+<div class="page-wrap" id="app" v-cloak>
+    <select v-model="lang" class="lang-select">
+      <option value="en">English</option>
+      <option value="ko">Korean</option>
+      <option value="ja">Japanese</option>
+      <option value="th">Thai</option>
+      <option value="zh-TW">Chinese Trad.</option>
+    </select>
+    <svg title="Language" version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 512 512" class="lang-select-icon">
+    <path d="M256 0c-141.385 0-256 114.615-256 256s114.615 256 256 256 256-114.615 256-256-114.615-256-256-256zM256 480.001c-31.479 0-61.436-6.506-88.615-18.226l116.574-131.145c2.603-2.929 4.041-6.711 4.041-10.63v-48c0-8.837-7.163-16-16-16-56.495 0-116.102-58.731-116.687-59.313-3-3.001-7.070-4.687-11.313-4.687h-64c-8.836 0-16 7.164-16 16v96c0 6.061 3.424 11.601 8.845 14.311l55.155 27.578v93.943c-58.026-40.478-96-107.716-96-183.832 0-34.357 7.745-66.903 21.569-96h58.431c4.244 0 8.313-1.686 11.314-4.686l64-64c3-3.001 4.686-7.070 4.686-11.314v-38.706c20.281-6.037 41.759-9.294 64-9.294 35.203 0 68.502 8.13 98.141 22.6-2.072 1.751-4.088 3.582-6.023 5.518-18.133 18.132-28.118 42.239-28.118 67.882s9.985 49.75 28.118 67.882c18.217 18.216 42.609 28.132 67.817 28.13 1.583 0 3.171-0.040 4.759-0.118 6.907 25.901 19.376 93.328-4.202 186.167-0.222 0.872-0.348 1.744-0.421 2.612-40.662 41.54-97.35 67.328-160.071 67.328z"></path>
+    </svg>
+    <div v-if="showConfig" style="text-align: center;">
+        <h1 style="text-align: center; display: block; color: #c3819c;">{{translate('llnTitle')}}</h1>
+        <p style="text-align: center; margin-top: 60px;">{{translate('selectNativeLang')}}</p>
+        <vue-multiselect style="width: 290px; margin: 0 auto;" v-model="nativeLangCode_G" track-by="val" label="name" :show-labels="false" :allow-empty="false" :options="nativeLangCodes_G"></vue-multiselect>
+        <span class="button-raised" style="margin: 45px auto; padding: 12px 30px" @click="doContinue()">{{translate('continue')}}</span>
+    </div>
+    <div v-if="showSetupComplete" style="text-align: center; padding: 0 30px 30px; max-width: 600px; margin: 0 auto; ">
+        <h1 style="display: block; margin-bottom: 35px; ">{{translate('success')}}</h1>
+        <p>{{translate('successText1')}}</p>
+        <p>{{translate('successText2')}}</p>
+    </div>
+    <div v-if="!showConfig">
+        <div class="main-title">
+            <h1 style="">
+                {{translate('howToUse')}}
+            </h1>
+        </div>
+
+        <div class="img-overlay" id="info-img" style="position: relative; overflow: hidden; margin-bottom: 30px;">
+            <img src="scr.png" style="width: 100%;">
+            <div class="info-baloon"
+                 style="position: absolute; left: 2%; top: 74%; width: 30%; height: 22%;">
+                {{translate('enableDisableLLN')}}
+            </div>
+            <div class="info-baloon"
+                 style="position: absolute; left: 13%; top: 42%; width: 21%; height: 17%;">
+                {{translate('llnOptions')}}
+            </div>
+            <div class="info-baloon"
+                 style="position: absolute; left: 33%; top: 14%; width: 22%; height: 24%;">
+                {{translate('llnDict')}}
+            </div>
+            <div class="info-baloon"
+                 style="position: absolute; left: 81%; top: 28%; width: 17%; height: 28%;">
+                {{translate('llnPausePlayback')}}
+            </div>
+        </div>
+        <script>
+            // update info balloons font size
+            let updateFontSize = function () {
+                setTimeout(function() {
+                    let img = document.getElementById('info-img');
+                    let elements = document.getElementsByClassName('info-baloon');
+                    for (let i = 0; i < elements.length; i++) {
+                        elements[i].style.fontSize = (img.clientWidth / 52) + 'px';
+                    }
+                });
+            };
+            window.addEventListener('resize', updateFontSize);
+            updateFontSize();
+        </script>
+        <p>
+            {{translate('llnTypesOfTranslations')}}
+
+        </p>
+
+
+        <p>{{translate('llnKeyboardIntro')}} </p>
+
+
+        <ul>
+            <li>{{translate('llnKeyboard1')}}</li>
+            <li>{{translate('llnKeyboard2')}}</li>
+            <li>{{translate('llnKeyboard3')}}</li>
+            <li>{{translate('llnKeyboard4')}}</li>
+        </ul>
+
+        <img src="keys.jpg" style="max-width: 600px; display: block; margin-left: 0; margin-right: auto; ">
+        
+        <p>{{translate('llnKeyboardOuttro')}} </p>
+
+        <img src="netflix_scr_2.png" style="width: 100%; display: block;">
+
+        <h2 class="heading-link">
+            <a href="catalogue.html" target="_blank">
+                {{translate('catalogue')}}
+                <svg style="position: relative; left: 2px; top: 1px; opacity: .7;" width="18px" height="18px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="external_link" class="icon_svg-stroke" stroke="#c3819c" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="17 13.5 17 19.5 5 19.5 5 7.5 11 7.5"></polyline>
+                        <path d="M14,4.5 L20,4.5 L20,10.5 M20,4.5 L11,13.5"></path>
+                    </g>
+                </svg>
+            </a>
+        </h2>
+
+        <p>{{translate('catalogueText')}}
+        </p>
+        <p>{{translate('catalogueText2')}} <img style="width: 30px; position: relative; top: 8px; left: 5px;" src="lln-logo-small.png" alt="logo" class="logo"></p>
+
+        <h2 class="heading-link">
+            <a href="more_info.html" target="_blank">
+                {{translate('moreInfo')}}
+                <svg style="position: relative; left: 2px; top: 1px; opacity: .7;" width="18px" height="18px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="external_link" class="icon_svg-stroke" stroke="#c3819c" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="17 13.5 17 19.5 5 19.5 5 7.5 11 7.5"></polyline>
+                        <path d="M14,4.5 L20,4.5 L20,10.5 M20,4.5 L11,13.5"></path>
+                    </g>
+                </svg>
+            </a>
+        </h2>
+
+        <p>{{translate('moreInfoText')}}
+        </p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue-multiselect@2.0.8"></script>
+
+<script>
+    function getQueryParams() {
+        var qs = document.location.search;
+        qs = qs.split("+").join(" ");
+        var params = {}, tokens,
+            re = /[?&]?([^=]+)=([^&]*)/g;
+        while (tokens = re.exec(qs)) {
+            params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+        }
+        return params;
+    }
+    Vue.component('vue-multiselect', window.VueMultiselect.default);
+    new Vue({
+        el: '#app',
+        created: function(){
+            updateFontSize();
+            
+            // try get ui and dropdown lang from hash, or navigator.language
+            let lang = navigator.language;
+            let langObj = this.nativeLangCodes_G.filter(o => o.val === lang);
+            if (!langObj || !langObj.length) {
+                langObj = this.nativeLangCodes_G.filter(o => o.val === lang.split('-')[0]);
+            }
+            if (langObj && langObj.length) {
+                this.nativeLangCode_G = langObj[0];
+                if (this.translations.llnTitle[langObj[0].val]) {
+                    this.lang = langObj[0].val;
+                }
+            }
+
+            // show config
+            this.showConfig = false;
+            this.showSetupComplete = !!(this.getHashValue('showConfig'));
+            // remove showConfig hash
+            this.setHashValue('showConfig', '');
+        },
+        methods: {
+            translate: function (key) {
+                return this.translations[key][this.lang] || this.translations[key]['en'];
+            },
+            doContinue: function(){
+                document.cookie = "nativeLangCode_G" + "=" + this.nativeLangCode_G.val + "; path=/; expires=2147483647";
+                this.showConfig = false;
+                this.showSetupComplete = true;
+                updateFontSize();
+            },
+            getHashValue: function (key) {
+                var hash = location.hash.match(new RegExp(key + '=([^&]*)'));
+
+                if (location.hash && hash) {
+                    return decodeURI(hash[1]);
+                }
+
+                return null;
+            },
+            setHashValue: function (key, value) {
+                key = encodeURI(key); value = encodeURI(value);
+
+                var kvp = location.hash.substr(1).split('&');
+                if (! location.hash) {
+                    kvp = [];
+                }
+                var i = kvp.length; var x; while(i--){
+                    x = kvp[i].split('=');
+
+                    if (x[0] == key){
+                        if (value) {
+                            x[1] = value;
+                            kvp[i] = x.join('=');
+                            break;
+                        } else {
+                            kvp.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+
+                if(i < 0 && value) {
+                    kvp[kvp.length] = [key,value].join('=');
+                }
+
+                document.location.hash = '#' + kvp.join('&');
+            }
+        },
+        data: {
+            lang: 'en',
+            showConfig: false,
+            showSetupComplete: false,
+            nativeLangCode_G: {val: 'en', name: 'English'},
+            nativeLangCodes_G: [
+                { val:"af", name:"Afrikaans"},
+                { val:"ar", name:"Arabic (العربية)"},
+                { val:"bn", name:"Bengali (বাংলা)"},
+                { val:"bs", name:"Bosnian (bosanski)"},
+                { val:"bg", name:"Bulgarian (български)"},
+                { val:"ca", name:"Catalan (català)"},
+                { val:"zh-CN", name:"Chinese Simplified (中文简体)"},
+                { val:"zh-TW", name:"Chinese Traditional (中文繁體)"},
+                { val:"hr", name:"Croatian (Hrvatski)"},
+                { val:"cs", name:"Czech (čeština)"},
+                { val:"da", name:"Danish (dansk)"},
+                { val:"nl", name:"Dutch (Nederlands)"},
+                { val:"en", name:"English"},
+                { val:"et", name:"Estonian (eesti keel)"},
+                { val:"tl", name:"Filipino"},
+                { val:"fi", name:"Finnish (suomi)"},
+                { val:"fr", name:"French (français)"},
+                { val:"de", name:"German (Deutsch)"},
+                { val:"el", name:"Greek (ελληνικά)"},
+                { val:"ht", name:"Haitian Creole (Kreyòl ayisyen)"},
+                { val:"iw", name:"Hebrew (עברית)"},
+                { val:"hi", name:"Hindi (हिन्दी)"},
+                { val:"hmn", name:"Hmong"},
+                { val:"hu", name:"Hungarian (magyar)"},
+                { val:"is", name:"Icelandic (Íslenska)"},
+                { val:"id", name:"Indonesian (Bahasa)"},
+                { val:"it", name:"Italian (italiano)"},
+                { val:"ja", name:"Japanese (日本語)"},
+                { val:"ko", name:"Korean (한국어)"},
+                { val:"lv", name:"Latvian (latviešu valoda)"},
+                { val:"lt", name:"Lithuanian (lietuvių kalba)"},
+                { val:"mg", name:"Malagasy (Fiteny Malagasy)"},
+                { val:"ms", name:"Malay (Bahasa melayu)"},
+                { val:"mt", name:"Maltese (Malti)"},
+                { val:"no", name:"Norwegian (Norsk)"},
+                { val:"fa", name:"Persian (فارسى)"},
+                { val:"pl", name:"Polish (polski)"},
+                { val:"pt", name:"Portuguese (português)"},
+                { val:"ro", name:"Romanian (limba română)"},
+                { val:"ru", name:"Russian (Русский)"},
+                { val:"sr", name:"Serbian (српски)"},
+                { val:"sk", name:"Slovak (slovenčina)"},
+                { val:"sl", name:"Slovenian (slovenščina)"},
+                { val:"es", name:"Spanish (español)"},
+                { val:"sw", name:"Swahili (Kiswahili)"},
+                { val:"sv", name:"Swedish (Svenska)"},
+                { val:"ta", name:"Tamil (தமிழ்)"},
+                { val:"te", name:"Telugu (తెలుగు)"},
+                { val:"th", name:"Thai (ภาษาไทย)"},
+                { val:"tr", name:"Turkish (Türkçe)"},
+                { val:"uk", name:"Ukrainian (Українська)"},
+                { val:"ur", name:"Urdu (اردو)"},
+                { val:"vi", name:"Vietnamese (tiếng việt)"},
+                { val:"cy", name:"Welsh (Cymraeg)"}
+            ],
+            translations: {
+                'llnTitle': {
+                    'en': 'Language Learning with Netflix',
+                    'ko': 'Language Learning with Netflix',
+                    'zh-TW': '使用Netflix進行語言學習（LLN）',
+                    'ja': 'Netflix で言語学習',
+                    'th': 'Language Learning with Netflix'
+                },
+                'selectNativeLang': {
+                    'en': 'Please select your native language：',
+                    'ko': '모국어를 선택하세요',
+                    'zh-TW': '請選擇您的母語：',
+                    'ja': '母国語を選択してください',
+                    'th': 'โปรดเลือกภาษาแม่ของคุณ:'
+                },
+                'selectTargetLang': {
+                    'en': 'The language you are learning：',
+                    'ko': '배울 언어를 선택하세요',
+                    'zh-TW': '您正在學習的語言：',
+                    'ja': '学習言語',
+                    'th': 'ภาษาที่คุณกำลังเรียน:'
+                },
+                'continue': {
+                    'en': 'CONTINUE',
+                    'ko': '계속',
+                    'zh-TW': '繼續',
+                    'ja': '続行',
+                    'th': 'ดำเนินการต่อ'
+                },
+                'success': {
+                    'en': 'Setup complete！',
+                    'ko': '설정 완료!',
+                    'zh-TW': '設定完成！',
+                    'ja': 'セットアップ完了！',
+                    'th': 'การตั้งค่าเสร็จสิ้นแล้ว!'
+                },
+                'successText1': {
+                    'en': 'Now when you open a video on Netflix (using the Chrome browser), you will have new features that are helpful for studying languages.',
+                    'ko': '이제 (Chrome 브라우저를 사용하여) 넷플릭스에서 비디오를 실행하시면 언어 학습에 유용한 새로운 기능을 확인하실 수 있습니다.',
+                    'zh-TW': '現在，當您在Netflix上開啟影片（使用Chrome瀏覽器）時，您將擁有有助於學習語言的新功能。',
+                    'ja': '今後 (Chrome ブラウザを使用して) Netflix でビデオを開くと、言語学習に便利な新機能が使えます。',
+                    'th': 'ในตอนนี้เมื่อคุณเปิดวิดีโอบน Netflix (โดยใช้เบราว์เซอร์ Chrome) คุณจะมีฟีเจอร์ใหม่ที่ช่วยในการเรียนภาษา'
+                },
+                'successText2': {
+                    'en': 'If you already have Netflix open, please reload the window.',
+                    'ko': '이미 넷플릭스를 열었으면, 윈도우를 다시 로딩하십시오.',
+                    'zh-TW': '如果您已經開啟Netflix，請重新載入視窗。',
+                    'ja': '既に Netflix が開いている場合は、ウィンドウを再度読み込んでください。',
+                    'th': 'หากคุณเปิด Netflix อยู่แล้ว โปรดโหลดหน้าต่างอีกครั้ง'
+                },
+                'howToUse': {
+                    'en': 'How to use LLN',
+                    'ko': 'LLN 이용 방법',
+                    'zh-TW': '如何使用LLN',
+                    'ja': 'LLN の使い方',
+                    'th': 'วิธีการใช้ LLN'
+                },
+                'llnDict': {
+                    'en': 'Click on a word to see the dictionary. Right click a word to save it.',
+                    'ko': '사전을 찾아보려면 단어를 클릭하세요. 오른쪽 클릭하면 단어를 저장할 수 있습니다.',
+                    'zh-TW': '點擊單詞可查看字典。右鍵點擊單詞可儲存它。',
+                    'ja': '辞書で調べるには単語をクリックします。単語を右クリックして保存します。',
+                    'th': 'คลิกคำศัพท์เพื่อดูพจนานุกรม คลิกขวาที่คำศัพท์เพื่อบันทึก'
+                },
+                'llnOptions': {
+                    'en': 'Click here to open LLN options.',
+                    'ko': '여기를 클릭하여 LLN 옵션을 열어 보세요.',
+                    'zh-TW': '點擊此處開啟LLN選項。',
+                    'ja': 'LLN オプションを開くにはここをクリックします。',
+                    'th': 'คลิกที่นี่เพื่อเปิดตัวเลือก LLN'
+                },
+                'enableDisableLLN': {
+                    'en': 'Click here to to enable or disable LLN, to switch back to normal Netflix.',
+                    'ko': 'LLN을 활성화, 비활성화하거나 다시 넷플릭스로 돌아가려면 여기를 클릭하세요.',
+                    'zh-TW': '點擊此處可啟用或禁用LLN，以切換回通常的Netflix。',
+                    'ja': 'LLN, を有効にする、または無効にして通常の Netflix に戻すには、ここをクリックします。',
+                    'th': 'คลิกที่นี่เพื่อเปิดหรือปิด LLN เพื่อสลับไปยัง Netflix แบบปกติ'
+                },
+                'llnPausePlayback': {
+                    'en': 'Automatically pause playback at the end of every subtitle.',
+                    'ko': '모든 자막에서 플레이백을 자동으로 일시 정지합니다.',
+                    'zh-TW': '在每條字幕的末尾自動暫停播放。',
+                    'ja': '各字幕の終わりに自動的に一時停止します。',
+                    'th': 'หยุดการเล่นโดยอัตโนมัติเมื่อแต่ละคำบรรยายสิ้นสุดลง'
+                },
+                'llnTypesOfTranslations': {
+                    'en': 'In the settings, you can choose to display two types of translations: machine and human. The machine translation is very literal, it helps you understand the structure of the sentence in the language you are studying. It can contain errors sometimes. The human translation is often useful, as it correctly translates expressions and idioms.',
+                    'ko': '설정에서 자동 번역과 인간 번역의 두 가지 유형 중 한 가지를 표시하도록 선택할 수 있습니다. 자동 번역은 직역이므로 학습하는 언어의 문자 구조를 이해할 수 있습니다. 여기에는 때때로 번역 오류가 나타날 수도 있습니다. 인간 번역의 경우는 표현과 관용구를 올바르게 번역하기 때문에 유용한 경우가 많습니다.',
+                    'zh-TW': '在設定中，您可以選擇顯示兩種類型的翻譯：機器翻譯和人工翻譯。機器翻譯非常字面，它能幫助您理解所學語言中的句子結構，有時可能包含錯誤。人工翻譯通常很有用，因為它能正確地翻譯語句和習語。',
+                    'ja': '設定で機械または人間による 2 つのタイプの訳文から選択して表示できます。機械翻訳は非常に文字通りの翻訳で、学習言語の文章の構成を理解するのに役立ちます。時々誤りがあります。人間の翻訳は、表現や熟語などを正しく訳すため便利です。',
+                    'th': 'ในการตั้งค่า คุณสามารถเลือกแสดงคำแปลได้สองประเภท: คำแปลจากเครื่องและมนุษย์ การแปลภาษาด้วยเครื่องนั้นจะเป็นไปตามตัวอักษร ช่วยให้คุณเข้าใจโครงสร้างของประโยคในภาษาที่คุณกำลังเรียนแต่อาจมีข้อผิดพลาดในบางครั้ง การแปลโดยมนุษย์นั้นมักมีประโยชน์เนื่องจากจะแปลสำนวนและภาษาเฉพาะได้อย่างถูกต้อง'
+                },
+                'llnKeyboardIntro': {
+                    'en': 'You can use keyboard keys to control the player.',
+                    'ko': '키보드의 키를 다음과 같이 사용하여 플레이어를 제어할 수 있습니다.',
+                    'zh-TW': '您可以使用鍵盤鍵來控製播放器。',
+                    'ja': 'キーボードのキーでプレイヤーをコントロールできます。',
+                    'th': 'คุณสามารถใช้ปุ่มคีย์บอร์ดเพื่อควบคุมเครื่องเล่น'
+                },
+                'llnKeyboard1': {
+                    'en': '\'a\' for the previous subtitle.',
+                    'ko': '\'a\': 이전 자막',
+                    'zh-TW': '「a」跳至上一條字幕。',
+                    'ja': '「a」で前の字幕に戻ります。',
+                    'th': '\'a\' สำหรับคำบรรยายก่อนหน้า'
+                },
+                'llnKeyboard2': {
+                    'en': '\'s\' to repeat a subtitle.',
+                    'ko': '\'s\': 자막 반복',
+                    'zh-TW': '「s」重複一條字幕。',
+                    'ja': '「s」で字幕を繰り返します。',
+                    'th': '\'s\' เพื่อดูคำบรรยายซ้ำ'
+                },
+                'llnKeyboard3': {
+                    'en': '\'d\' for the next subtitle.',
+                    'ko': '\'d\': 다음 자막',
+                    'zh-TW': '「d」跳至下一條字幕。',
+                    'ja': '「d」で次の字幕に進みます。',
+                    'th': '\'d\' สำหรับคำบรรยายถัดไป'
+                },
+                'llnKeyboard4': {
+                    'en': '\'space bar\' to play/pause playback',
+                    'ko': '\'스페이스 바’: 플레이/플레이백 일시 중지',
+                    'zh-TW': '「空格鍵」播放/暫停播放',
+                    'ja': '「スペースキー」で再生・一時停止します。',
+                    'th': '\'space bar\' เพื่อเล่น/หยุดการเล่น'
+                },
+                'llnKeyboardOuttro': {
+                    'en': 'Look in the settings to find more keyboard shortcuts.',
+                    'ko': '더 많은 키보드 단축키를 찾아보시려면 설정을 확인하십시오.',
+                    'zh-TW': '查看設定可找到更多的快速鍵。',
+                    'ja': '設定で他のキーボードショートカットを確認できます。',
+                    'th': 'ดูในส่วนการตั้งค่าเพื่อค้นหาทางลัดคีย์บอร์ดเพิ่มเติม'
+                },
+                'catalogue': {
+                    'en': 'Catalogue',
+                    'ko': '카탈로그',
+                    'zh-TW': '目錄',
+                    'ja': 'カタログ',
+                    'th': 'แค็ตตาล็อก'
+                },
+                'catalogueText': {
+                    'en': 'We created a special catalogue to help you find Netflix titles with high-quality subtitles in the language you study. The titles in the catalogue should all work well with LLN.',
+                    'ko': '학습 중인 언어에 대한 고품질 자막을 갖춘 넷플릭스 영화를 찾을 수 있도록 카탈로그를 작성하였습니다. 카탈로그에 수록된 모든 제목은 LLN에서 잘 작동합니다.',
+                    'zh-TW': '我們創建了一個特殊目錄，以幫助您找到具有您所學語言的高品質字幕的Netflix影片。目錄中的影片應該都能在LLN中很好地運作。',
+                    'ja': '学習言語のクオリティの高い字幕付きの Netflix ビデオが掲載された、特別なカタログをご用意しました。カタログのビデオはすべて LLN に適しています。',
+                    'th': 'เราได้สร้างแค็ตตาล็อกพิเศษเพื่อช่วยให้คุณค้นหาภาพยนตร์ Netflix ที่มีคำบรรยายคุณภาพสูงในภาษาที่คุณเรียน ภาพยนตร์ทั้งหมดในแค็ตตาล็อกควรจะทำงานได้ดีกับ LLN'
+                },
+                'catalogueText2': {
+                    'en': 'You can access the catalogue at any time by clicking the LLN icon at the top-right corner of Chrome.',
+                    'ko': 'Chrome 오른쪽 상단에 있는 LLN 아이콘을 클릭하면 언제든지 카탈로그를 확인할 수 있습니다.',
+                    'zh-TW': '您可以隨時透過點擊Chrome右上角的LLN圖示存取目錄。',
+                    'ja': 'このカタログは、Chrome の右上にある LLN アイコンをクリックすることでいつでも利用できます。',
+                    'th': 'คุณสามารถเข้าถึงแค็ตตาล็อกได้ทุกเมื่อโดยการคลิกไอคอน LLN ที่มุมบนขวาของ Chrome'
+                },
+                'moreInfo': {
+                    'en': 'More Information',
+                    'ko': '더 많은 정보',
+                    'zh-TW': '更多資訊',
+                    'ja': '詳細',
+                    'th': 'ข้อมูลเพิ่มเติม'
+                },
+                'moreInfoText': {
+                    'en': 'Click here to see advice for using the extension.',
+                    'ko': '확장 프로그램 사용에 대한 도움말을 보려면 여기를 클릭하십시오. 이 정보는 현재 영어로만 제공됩니다. :-/',
+                    'zh-TW': '點擊此處查看使用擴展程式的建議。此資訊目前僅提供英文版本。: -/',
+                    'ja': '拡張機能の使い方に関するアドバイスはここをクリックしてください。この情報は現在英語のみで提供されています。:-/',
+                    'th': 'คลิกที่นี่เพื่อดูคำแนะนำในการใช้ส่วนขยาย ในปัจจุบันข้อมูลนี้มีอยู่ในภาษาอังกฤษเท่านั้น :-/'
+                },
+
+            }
+        } // end of data
+    });
+</script>
+
+</body>
+
+</html>

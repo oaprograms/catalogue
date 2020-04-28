@@ -1,0 +1,427 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Language Learning with Youtube - Catalogue</title>
+    <meta name="description" content="">
+    <meta name="author" content="dioco">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="lln-logo-small.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Maiden+Orange|Roboto:400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            overflow-y: scroll;
+            padding: 40px;
+            margin: 0;
+            box-sizing: border-box;
+            background-color: rgb(250, 227, 225);
+        }
+        .page-wrap {
+            background-color: #fff;
+            margin-bottom: 48px;
+            box-shadow: 0 1px 4px 0 rgba(0,0,0,0.37);
+            padding-bottom: 6px;
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 35px 45px;
+            position: relative;
+            background: white;
+        }
+        .multiselect__option--highlight {
+            background: #ff6a6a;
+        }
+        table, tr, td, th {
+            border: 1px solid #ddd;
+            border-collapse: collapse;
+        }
+        td, th {
+            padding: 10px;
+        }
+        .img-wrap {
+            min-height: 200px;
+            min-width: 1px;
+        }
+        img {
+            max-height: 200px;
+        }
+        .hidden {
+            display: none;
+        }
+        .title {
+            font-size: 1.15em;
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 20px;
+            color: black;
+        }
+        .synopsis {
+            vertical-align: top;
+            padding-top: 30px;
+            padding-left: 20px;
+        }
+        .synopsis-text {
+            text-decoration: none;
+            color: black;
+        }
+        .filters {
+            margin: 0 0 20px;
+            display: flex;
+            align-items: center;
+            padding-top: 15px;
+            flex-wrap: wrap;
+        }
+        .filter {
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .filters label {
+            font-weight: bold;
+        }
+        .multiselect {
+            margin-right: 22px;
+            margin-left: 5px;
+            width: 210px;
+            display: inline-block;
+        }
+        .results-count {
+            margin-left: 8px;
+            padding-top: 6px;
+        }
+        .center {
+            text-align: center;
+        }
+        .mt10 {
+            margin-top: 10px;
+        }
+        .bottom-links {
+            margin-top: 30px;
+            text-align: right;
+        }
+        .bottom-links a {
+            margin: 0 0 0 10px;
+            background: #ff6a6a;
+            color: white;
+            border-radius: 3px;
+            padding: 7px 17px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .bottom-links .imdb-link {
+            background: #ffd8d8;
+            color: #000;
+            font-weight: 900;
+        }
+        .mb {
+            margin-bottom: 15px;
+        }
+        .small {
+            font-size: .8em;
+        }
+        .title {
+            display: flex;
+            flex-direction: column;
+        }
+        .fb {
+            display: none;
+        }
+        @media (min-width: 1100px) {
+            .title {
+                flex-direction: row;
+                align-items: center;
+            }
+            .title h1 {
+                flex-grow: 1;
+            }
+            .title iframe {
+                flex-grow: 0;
+            }
+            .fb {
+                display: block;
+            }
+        }
+        h1 {
+            font-size: 40px;
+            font-weight: 500;
+            font-family: "Maiden Orange";
+            display: flex;
+            align-items: center;
+            color: #666;
+            margin-top: 10px;
+        }
+        h1 .date {
+            font-family: "Roboto";
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            margin: 0;
+        }
+        h1 .title-span {
+            position: relative;
+        }
+        .logo {
+            width: 48px;
+            height: auto;
+            margin-right: 15px;
+            position: relative;
+            top: 3px;
+        }
+        .sorter {
+            cursor: pointer;
+        }
+        .sorter.desc:before {
+            content: '▼';
+            margin-right: 4px;
+        }
+        .filters2 {
+            margin-bottom: 10px;
+        }
+        .filter-info {
+            background: #ddd;
+            border-radius: 5px;
+            display: inline-block;
+            padding: 3px 8px;
+        }
+        .filter-info b {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .genre {
+            cursor: pointer;
+        }
+        .genre:hover, .sorter:hover {
+            color: #c55;
+        }
+        .genre:hover span {
+            color: #000;
+        }
+        .genre.active {
+            font-weight: bold;
+            color: #c55;
+        }
+        [v-cloak] {display: none; }
+    </style>
+
+    <script type="text/javascript">
+
+        function getQueryParams() {
+
+            var qs = document.location.search;
+            qs = qs.split("+").join(" ");
+            var params = {}, tokens,
+                re = /[?&]?([^=]+)=([^&]*)/g;
+            while (tokens = re.exec(qs)) {
+                params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+            }
+
+            return params;
+        }
+
+        var query = getQueryParams();
+
+        if(query.ref) {
+            var expiration_date = new Date();
+            expiration_date.setMonth(expiration_date.getMonth() + 1);
+            document.cookie = "ref" + "=" + query.ref + "; path=/; expires=" + expiration_date.toUTCString();
+        }
+
+    </script>
+
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2107653272628833');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+                   src="https://www.facebook.com/tr?id=2107653272628833&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132852687-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-132852687-1');
+    </script>
+    <!-- end Google Analytics -->
+
+</head>
+
+<body>
+
+<div style="width: 100%; height: 100px; position: absolute; background-color: rgb(219, 68, 55); top: 0; left: 0;">
+</div>
+<div class="page-wrap">
+
+    <div style="background-color: rgb(255, 138, 116); height: 8px; position: absolute; top: 0; width: 100%; left: 0;"></div>
+
+    <div id="app">
+        <div class="intro">
+            <div class="title">
+                <h1 style="margin-bottom: 0;">
+                    <a href="/"><img src="lln-logo-small.png" alt="logo" class="logo"></a>
+                    <span class="title-span">
+                    Language Learning with Youtube - Catalogue
+                </span>
+                </h1>
+            </div>
+            <p style="line-height: 1.5;">
+                We created this catalogue to help you find high-quality Youtube channels with captions. The channels listed here should work well with our <a href="https://chrome.google.com/webstore/detail/hoombieeljmmljlkjmnheibnpciblicm">extension for studying languages with Youtube.</a>
+            </p>
+            <p>
+            </p>
+        </div>
+        <div class="filters" v-cloak>
+        <span class="filter">
+            <label>Language you study:</label>
+            <vue-multiselect v-model="language" :show-labels="false" :allow-empty="false" @input="loadLanguageCountry()" :options="languages"></vue-multiselect>
+        </span>
+
+            <div class="results-count">
+                <span v-if="loading && items.length == 0" style="color: gray;">
+                Loading...
+            </span>
+            </div>
+        </div>
+        <div v-if="!loading && items.length == 0" style="color: red; margin-top: 40px;">
+            Couldn't find any titles for selected language
+        </div>
+        <div class="filters2"><span class="filter-info" v-if="filterBy.length">Filter: {{filterBy}}<b @click="filter('')">x</b></span></div>
+        <table v-if="items.length" v-cloak>
+            <tr>
+                <th>Image</th>
+                <th>Title &amp; Description</th>
+            </tr>
+            <tr v-for="item in items" v-if="item.language === language">
+                <td class="center">
+                    <a :href="item.url">
+                        <div class="img-wrap">
+                            <img :src="item.image"/>
+                        </div>
+                    </a>
+                </td>
+                <td class="synopsis">
+                    <a class="title" :href="item.url">
+                        {{item.title}}
+                        <span style="font-size: 15px;font-weight: 300;margin-left: 10px;font-style: italic;color: #ff5555;"># {{item.tags}}</span>
+                    </a>
+                    <a class="synopsis-text" :href="item.url">
+                        {{item.desc}}
+                    </a>
+                    <div class="bottom-links" style="text-align: right; margin-right: 20px;">
+                        <a class="imdb-link" :href="item.playlists_url" target="_blank">Playlists</a>
+                        <a :href="item.url" target="_blank">
+                            Watch on Youtube
+                            <span style="margin-left: 10px;">▶</span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vue-multiselect@2.0.8"></script>
+
+<script>
+    (function(){
+        'use strict';
+        Vue.component('vue-multiselect', window.VueMultiselect.default);
+        new Vue({
+            el: '#app',
+            data: {
+                items: [],
+                language: 'English',
+                languages: ["English"],
+                loading: true,
+                sortBy: '',
+                filterBy: ''
+            },
+            created: function () {
+                var language = this.getHashValue('language');
+                if (this.languages.indexOf(language) > -1) this.language = language;
+
+                this.loadLanguageCountry();
+            },
+            methods: {
+                loadLanguageCountry: function() {
+                    let that = this;
+                    this.items = [];
+                    this.sortBy = '';
+                    this.loading = true;
+                    this.setHashValue('language', this.language);
+                    fetch("https://storage.googleapis.com/lln-catalogue/youtube-catalog.json").then(function(r){
+                        return r.json();
+                    }).then(function(json){
+                        that.items = json.filter(item => item.language === that.language);
+                        that.loading = false;
+                    }).catch(function(err) {
+                        that.items = [];
+                        that.loading = false;
+                        console.error(err)
+                    });
+                },
+                getHashValue: function (key) {
+                    var hash = location.hash.match(new RegExp(key + '=([^&]*)'));
+
+                    if (location.hash && hash) {
+                        return decodeURI(hash[1]);
+                    }
+
+                    return null;
+                },
+                setHashValue: function (key, value) {
+                    key = encodeURI(key); value = encodeURI(value);
+
+                    var kvp = location.hash.substr(1).split('&');
+                    if (! location.hash) {
+                        kvp = [];
+                    }
+                    var i = kvp.length; var x; while(i--){
+                        x = kvp[i].split('=');
+
+                        if (x[0] == key){
+                            x[1] = value;
+                            kvp[i] = x.join('=');
+                            break;
+                        }
+                    }
+
+                    if(i < 0) {
+                        kvp[kvp.length] = [key,value].join('=');
+                    }
+
+                    document.location.hash = '#' + kvp.join('&');
+                }, sort: function(sortBy) {
+                    this.sortBy = sortBy;
+                    this.items.sort((a, b) => parseFloat(b[this.sortBy]) - parseFloat(a[this.sortBy]));
+                }, filter: function(genre) {
+                    this.filterBy = this.filterBy === genre ? '' : genre;
+                }
+            }
+        })
+
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Language Learning with Netflix</title>
+    <meta name="description" content="">
+    <meta name="author" content="NLLE">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="lln-logo-small.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Maiden+Orange|Roboto:400,500,700" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            overflow-y: scroll;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .page-wrap {
+            background-color: #fff;
+            margin-bottom: 48px;
+            padding-bottom: 6px;
+            max-width: 1366px;
+            margin: 0 auto;
+            padding: 35px 45px 40px 45px;
+            position: relative;
+            background: white;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .page-wrap {
+                padding: 25px 10px;
+            }
+
+        }
+
+        table, tr, td, th {
+            border: 1px solid #ddd;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            padding: 10px;
+        }
+
+        .img-wrap {
+            min-height: 200px;
+            min-width: 1px;
+        }
+
+        img {
+            max-height: 200px;
+        }
+
+        .title {
+            font-weight: bold;
+        }
+
+        .title a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .synopsis a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .filters {
+            margin: 30px 0 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        select {
+            padding: 10px 15px;
+            margin-right: 10px;
+            width: 180px;
+        }
+
+        .results-count {
+            margin-left: 14px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .mt10 {
+            margin-top: 10px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-family: "Maiden Orange";
+            color: #666;
+            text-align: left;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        @media (max-width: 770px) {
+            h1 {
+                font-size: 26px;
+            }
+        }
+
+        .title {
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .fb {
+            display: none;
+        }
+
+        @media (min-width: 1100px) {
+            .fb {
+                display: block;
+            }
+
+            .title .fb {
+                border: none;
+                overflow: hidden;
+                position: absolute;
+                right: 0;
+                top: 5px;
+            }
+        }
+
+        .logo {
+            width: 48px;
+            height: auto;
+            margin-right: 15px;
+            position: relative;
+            top: 4px;
+        }
+
+        [v-cloak] {
+            display: none
+        }
+
+        .video {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            border-radius: 15px;
+            outline: none;
+        }
+
+        .text-section {
+            margin-top: 30px;
+        }
+
+        .video-wrapper {
+            position: relative;
+        }
+
+        .video {
+            max-height: 50vw;
+        }
+
+        .video-overlay-play-button {
+            box-sizing: border-box;
+            width: 100%;
+            height: 100%;
+            padding: 10px calc(50% - 50px) 35px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            opacity: 0.95;
+            cursor: pointer;
+            transition: opacity 150ms;
+        }
+
+        @media (max-width: 767px) {
+            .video-overlay-play-button {
+                display: none;
+            }
+        }
+
+        .video-overlay-play-button:hover {
+            opacity: 1;
+        }
+
+        .video-overlay-play-button.is-hidden {
+            display: none;
+        }
+
+        .top-nav {
+            flex-wrap: wrap;
+            justify-content: space-around;
+            max-width: 560px;
+            margin: 0 auto;
+            margin-bottom: 15px;
+            padding: 8px;
+
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .button {
+            padding: 11px 12px;
+            border-radius: 4px;
+            transition: background .2s;
+        }
+
+        .button-raised {
+            box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+            padding: 11px 24px 11px 24px;
+            border-radius: 4px;
+            transition: background .2s;
+        }
+
+        .button:hover, .button-raised:hover {
+            background: #f7f7f7;
+        }
+
+        .top-nav a {
+            text-decoration: none;
+            margin: 0 5px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .top-nav a:hover {
+            color: #c3819c;
+        }
+
+        @media (max-width: 750px) {
+            .top-nav a {
+                margin: 8px 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .top-nav a {
+                margin: 8px 10px;
+            }
+        }
+
+        .featured-in {
+            background-color: #eee;
+        }
+
+        .press-quotes {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-around;
+            padding: 5px 0px 15px;
+            text-align: center;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .press-quote {
+            padding: 20px;
+            text-decoration: none;
+        }
+
+        .press-quote-description {
+            color: #666;
+            margin: 20px auto;
+            font-size: 14px;
+            max-width: 180px;
+            font-weight: 300;
+        }
+
+        .separator {
+            width: 115px;
+            height: 1px;
+            background: #ddd;
+            margin: 45px auto 12px;
+        }
+
+        a, a:visited, a:active {
+            color: #c3819c;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #8b5a6e;
+        }
+
+        .subscription-link {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        function getQueryParams() {
+
+            var qs = document.location.search;
+            qs = qs.split("+").join(" ");
+            var params = {}, tokens,
+                re = /[?&]?([^=]+)=([^&]*)/g;
+            while (tokens = re.exec(qs)) {
+                params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+            }
+
+            return params;
+        }
+
+        var query = getQueryParams();
+
+        if (query.ref) {
+            var expiration_date = new Date();
+            expiration_date.setMonth(expiration_date.getMonth() + 1);
+            document.cookie = "ref" + "=" + query.ref + "; path=/; expires=" + expiration_date.toUTCString();
+        }
+
+    </script>
+
+    <style>
+        .webstore-img {
+            width: 248px;
+            margin: 12px 0 5px;
+            border: 1px solid #ddd;
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, .25);
+        }
+
+        .write-to-us {
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 25px;
+        }
+
+        .text-section {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 580px;
+            padding: 0 10px;
+        }
+    </style>
+    <style type="text/css">
+        .st0 {
+            fill: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+
+</div>
+<div class="page-wrap" id="app" v-cloak>
+
+    <div class="title" style="margin-bottom: 50px;">
+        <h1>
+            <a href="/"><img src="http://languagelearningwithnetflix.com/lln-logo-small.png" alt="logo"
+                             class="logo"></a>
+            Language Learning with Netflix
+        </h1>
+    </div>
+    <div v-if="loaded">
+        <div v-if="!user || !user.email">
+            <div style="margin-bottom: 35px;">Please log in to view your subscription settings.</div>
+            <a href="#" class="button button-raised" @click="logIn" style="margin-left: 12px;">
+                <b>Log in</b>
+            </a>
+        </div>
+
+        <div v-if="user && user.email && !(user && user.subscriptionInfo && user.subscriptionInfo.cancel_url)">
+            You are <b>not</b> subscribed to LLN Pro. <br>
+            Please use the extension to subscribe.
+        </div>
+
+        <div v-if="user && user.subscriptionInfo && user.subscriptionInfo.cancel_url">
+            <div class="user-info">
+                <h4>User info:</h4>
+                <p><b>Email:</b> {{ user.email }}</p>
+            </div>
+            <a href="#" class="button button-raised" @click="loadItems()">Load items</a>
+            <a href="#" class="button button-raised" @click="moveFirstToLast()">Move first to last</a>
+            <div style="padding: 20px 0;">
+                <div v-for="item in items">
+                    {{item.data().word || item.data().subtitle}}
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <a href="#" class="button button-raised" @click="logOut" v-if="user && user.email">
+                Log out
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-functions.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyC457-gC0a0NqwoWhSrEp-VFgcVnBrKy3w",
+        authDomain: "nlle-b0128.firebaseapp.com",
+        databaseURL: "https://nlle-b0128.firebaseio.com",
+        projectId: "nlle-b0128",
+        storageBucket: "nlle-b0128.appspot.com",
+        messagingSenderId: "177081285221",
+        appId: "1:177081285221:web:1991e8331996687330a48c"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.firestore().enablePersistence()
+        .catch(function(err) {
+            if (err.code == 'failed-precondition') {
+                // Multiple tabs open, persistence can only be enabled
+                // in one tab at a a time.
+                // ...
+                alert('enablePersistence failed: Multiple tabs open');
+            } else if (err.code == 'unimplemented') {
+                // The current browser does not support all of the
+                // features required to enable persistence
+                // ...
+                alert('enablePersistence failed: No browser support');
+            }
+        });
+    var db = firebase.firestore();
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+
+<script>
+    var functions = firebase.functions();
+    new Vue({
+        el: '#app',
+        methods: {
+            translate: function (key) {
+                return this.translations[key][this.lang] || this.translations[key]['en'];
+            },
+            logIn: function (e) {
+                e.preventDefault();
+                let that = this;
+                var provider = new firebase.auth.GoogleAuthProvider();
+                firebase.auth().signInWithRedirect(provider).then(function (result) {
+                    that.user = result.user;
+                    that.onLogIn();
+                }).catch(function (error) {
+                    if (error.message) {
+                        alert('Sign in error: ' + error.message);
+                    }
+
+                });
+            },
+            loadItems: function () {
+                let that = this;
+                db.collection("savedItems").doc(btoa(this.user.email)).collection('data').orderBy("smNextPracticeDate", "asc")
+                .get().then(function(querySnapshot) {
+                    console.log(querySnapshot);
+                    alert('loadItems success');
+                    that.items = querySnapshot.docs;
+                }).catch(function(error){
+                    alert('loadItems failure');
+                });
+            },
+            moveFirstToLast: function () {
+                let that = this;
+                db.collection("savedItems").doc(btoa(this.user.email)).collection('data').doc(that.items[0].id)
+                    .set({smNextPracticeDate: Date.now() + 3600 * 1000}, {merge: true}).then(function(result) {
+                    alert('moveFirstToLast success');
+                }).catch(function(error){
+                    alert('moveFirstToLast failure');
+                });
+            },
+            onLogIn: function () {
+                let that = this;
+                if (that.user) {
+                    that.loaded = false;
+                    let getUserData = firebase.functions().httpsCallable('getUserData');
+                    getUserData({}).then(function (result) {
+                        // Read result of the Cloud Function.
+                        that.user.subscriptionInfo = result.data;
+                        that.loaded = true;
+                        that.$forceUpdate();
+                    });
+                } else {
+                    that.loaded = true;
+                }
+
+            },
+            logOut: function (e) {
+                e.preventDefault();
+                firebase.auth().signOut().then(function () {
+                    // Sign-out successful.
+                }).catch(function (error) {
+                    // An error happened.
+                });
+            }
+        },
+        created: function () {
+            let that = this;
+
+            let lang = navigator.language;
+            if (this.translations.install[lang]) {
+                this.lang = lang;
+            } else {
+                this.lang = lang.split('-')[0];
+            }
+
+            firebase.auth().onAuthStateChanged(function (user) {
+                that.user = user;
+                if (user && user.email) { // logged in
+                    that.onLogIn();
+                } else {
+                    that.user = null;
+                    that.loaded = true;
+                }
+                that.$forceUpdate();
+                //if (user) {
+                // User is signed in.
+                //var displayName = user.displayName;
+                //var email = user.email;
+                //var emailVerified = user.emailVerified;
+                //var photoURL = user.photoURL;
+                //var isAnonymous = user.isAnonymous;
+                //var uid = user.uid;
+                //var providerData = user.providerData;
+                //} else {
+                // User is signed out.
+                // ...
+                //}
+            });
+        },
+        data: {
+            loaded: false,
+            user: {},
+            lang: 'en',
+            items: [],
+            translations: {
+                'install': {
+                    'en': 'Install',
+                    'ko': '설치',
+                    'zh-TW': '安裝',
+                    'ja': 'インストール',
+                    'th': 'ติดตั้ง'
+                },
+                'catalogue': {
+                    'en': 'Catalogue',
+                    'ko': '카테고리',
+                    'zh-TW': '目錄',
+                    'ja': 'カタログ',
+                    'th': 'หมวดหมู่'
+                },
+                'instructions': {
+                    'en': 'Instructions',
+                    'ko': '지침',
+                    'zh-TW': '說明',
+                    'ja': '説明書',
+                    'th': 'คำแนะนำ'
+                },
+                'llnIntro': {
+                    'en': 'LLN is a Chrome extension that gives you superpowers over Netflix. It makes studying languages with films/series more effective and enjoyable.',
+                    'ko': 'LLN은 Netflix가 드리는 강력한 크롬 익스텐션입니다. 이 앱은 영화/시리즈와 함께 더욱 효과적이고 즐겁게 언어를 배울 수 있도록 해줍니다.',
+                    'zh-TW': 'LLN是一款Chrome擴展程式，可讓您在Netflix上擁有超能力。它使得藉由電影/連續劇學習語言更加高效和愉快。',
+                    'ja': 'LLNは、Netflixでスーパーパワーを発揮するChrome拡張機能です。映画/TVシリーズで言語をより効果的かつ楽しく学べます。',
+                    'th': 'LLN เป็นส่วนขยาย Chrome ที่มอบสุดยอดพลังให้แก่ Netflix มันทำให้การเรียนรู้ภาษาด้วยภาพยนตร์/ซีรีส์เป็นไปอย่างมีประสิทธิภาพมากยิ่งขึ้นและเพลิดเพลินได้'
+                },
+                'improvingText': {
+                    'en': 'We are still improving the extension. To suggest a feature or report an issue, please visit our <a href="https://forum.languagelearningwithnetflix.com/" target="_blank">forum</a>. Or <a href="mailto:LanguageLearningExtension@gmail.com">write to us</a>.',
+                    'ko': ' ',
+                    'zh-TW': ' ',
+                    'ja': ' ',
+                    'th': ' '
+                },
+                'catalogueText': {
+                    'en': 'See our <a href="catalogue.html">special catalogue</a> for recommendations for films/series to study with.',
+                    'ko': '함께 배울 수 있는 영화/시리즈를 위해 저희가 추천하는 <a href="catalogue.html">특별 카탈로그</a>를 참조하세요.',
+                    'zh-TW': '請參閱我們的<a href="catalogue.html">特別目錄</a>，獲取針對您要學習的電影/連續劇的建議。',
+                    'ja': '学習用にお勧めの映画/TVシリーズについては、<a href="catalogue.html">特別カタログ</a>をご覧ください。',
+                    'th': 'ดู <a href="catalogue.html">หมวดหมู่พิเศษ</a> ของเราสำหรับการแนะนำภาพยนตร์/ซีรีส์เพื่อการเรียนรู้'
+                },
+                'instructionsText': {
+                    'en': 'Check out the <a href="instructions.html">instructions for use</a> for more study tips.',
+                    'ko': '더 많은 학습 팁을 보시려면 <a href="instructions.html">사용 지침</a>을 확인해 보세요.',
+                    'zh-TW': '請查看<a href="instructions.html">使用說明</a>，獲取更多的學習提示。',
+                    'ja': 'その他の学習のヒントについては、<a href="instructions.html">使用説明書</a>をご覧ください。',
+                    'th': 'ตรวจสอบ <a href="instructions.html">คำแนะนำสำหรับการใช้</a> สำหรับเคล็ดลับในการเรียนรู้เพิ่มเติม'
+                },
+                'fbText': {
+                    'en': 'Our <a href="https://www.facebook.com/LanguageLearningWithNetflix">facebook page</a> has the latest news/updates about the extension.',
+                    'ko': ' ',
+                    'zh-TW': ' ',
+                    'ja': ' ',
+                    'th': ' '
+                },
+                'backgroundInfoText': {
+                    'en': 'Here is some more <a href="https://languagelearningwithnetflix.com/interview.html">background information</a> about our project.',
+                    'ko': ' ',
+                    'zh-TW': ' ',
+                    'ja': ' ',
+                    'th': ' '
+                },
+                'manageSubscription': {
+                    'en': 'Manage Subscription',
+                    'ko': '구독 관리',
+                    'zh-TW': '訂閱管理',
+                    'ja': '購読を管理する',
+                    'th': 'จัดการแผนสมาชิก'
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

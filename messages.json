@@ -1,0 +1,16 @@
+{
+  "YOUTUBE": {
+    "message": "",
+    "color": "red",
+    "link": "http://languagelearningwithnetflix.com/",
+    "showErrorIcon": true,
+    "showNewIcon": false
+  },
+  "NETFLIX": {
+    "message": "",
+    "color": "red",
+    "link": "http://languagelearningwithnetflix.com/",
+    "showErrorIcon": false,
+    "showNewIcon": true
+  }
+}
