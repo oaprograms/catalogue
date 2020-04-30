@@ -7,9 +7,9 @@
     "showNewIcon": false
   },
   "NETFLIX": {
-    "message": "",
-    "color": "red",
-    "link": "http://languagelearningwithnetflix.com/",
+    "message": "Hey! Now you can study languages with Youtube too!",
+    "color": "",
+    "link": "http://yt.dioco.io/",
     "showErrorIcon": false,
     "showNewIcon": true
   }
