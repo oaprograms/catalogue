@@ -6,7 +6,7 @@
     "showErrorIcon": true,
     "showNewIcon": false
   },
-  "NETFLIX": {
+  "NETFLIX": { 
     "message": "Hey! Now you can study languages with Youtube too!",
     "color": "",
     "link": "http://yt.dioco.io/",
