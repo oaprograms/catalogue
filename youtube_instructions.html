@@ -42,10 +42,10 @@
         text-decoration: none;
         color: black;
     }
-    .main-title {
-        display: flex;
-        flex-direction: column;
-    }
+    /*.main-title {*/
+    /*    display: flex;*/
+    /*    flex-direction: column;*/
+    /*}*/
     @media (min-width: 1100px) {
         .main-title {
             flex-direction: row;
@@ -82,13 +82,14 @@
         margin-top: 10px;
     }
     h1 {
-        font-size: 43px;
+        font-size: 40px;
         font-weight: 500;
         font-family: "Maiden Orange";
-        display: flex;
+        /*display: flex;*/
         align-items: center;
         color: #666;
         margin-top: 10px;
+        clear: both;
     }
     .logo { 
         width: 48px;
@@ -175,23 +176,25 @@
     </div>
     <div v-if="!showConfig">
         <div class="main-title">
-            <h1 style="">
+            <h1 style="text-align: center;">
                 {{translate('howToUse')}}
             </h1>
         </div>
 
-        <div style="text-align: center; padding: 50px 0;">
+        <div style="text-align: center; padding: 0 0 50px;">
             <iframe style="max-width: 100%; display: inline-block;" width="820" height="440" src="https://www.youtube.com/embed/OmBk6ZDPVcg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
 
+        <h2 style="text-align: center; margin-top: 10px; margin-bottom: 35px;">{{translate('howToFindVideos')}}</h2>
         <p>{{translate('youtubeSearch1')}}</p>
-        <img src="youtube_search.png" style="width: 100%; box-shadow: 4px 4px 9px 0px rgba(0,0,0,0.5);
+        <img src="youtube_search.png" style="width: 100%; box-shadow: 4px 4px 9px 0px rgba(0,0,0,0.5); margin: 20px 0;
 }
 
 ;">
         <p>{{translate('youtubeSearch2')}}</p>
         <p>{{translate('youtubeSearch3')}} <a href="youtube_language_instructions.html" target="_blank">{{translate('youtubeSearch4')}}</a></p>
 
+        <h2 style="text-align: center; margin-top: 50px; margin-bottom: 0px;">{{translate('studyingWithVideo')}}</h2>
         <div class="img-overlay" id="info-img" style="position: relative; overflow: hidden; margin-bottom: 30px;">
             <img src="youtube_scr_v4.jpg" style="width: 100%;">
             <div class="info-baloon"
@@ -239,7 +242,7 @@
 
         <p style="margin: 35px 0 25px;">{{translate('llnKeyboardOuttro')}} </p>
         
-        <img src="youtube_scr_2.png" style="width: 100%; display: block; box-shadow: rgba(0, 0, 0, 0.5) 4px 4px 9px 0px;">
+        <img src="youtube_scr_2.png" style="width: 100%; display: block; box-shadow: rgba(0, 0, 0, 0.5) 4px 4px 9px 0px;     margin-bottom: 40px;">
         
         <h2 class="heading-link">
             <a href="youtube_catalogue.html" target="_blank">
