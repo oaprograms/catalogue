@@ -439,7 +439,7 @@
                     if ((this.language == 'English' || this.language == 'Japanese') && this.country.val && this.country.val.length > 1) {
                         filename += '_' + this.country.val;
                     }
-                    fetch("https://storage.googleapis.com/lln-catalogue/movie-data/" + encodeURIComponent(filename) + ".json").then(function(r){
+                    fetch("https://extension.dioco.io/catalogue/movie-data/" + encodeURIComponent(filename) + ".json").then(function(r){
                         return r.json();
                     }).then(function(json){
                         that.movies = json.filter(function(movie){
