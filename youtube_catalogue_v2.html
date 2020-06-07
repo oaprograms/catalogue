@@ -43,11 +43,11 @@
             padding: 5px;
         }
         .img-wrap {
-            min-height: 150px;
+            min-height: 100px;
             min-width: 1px;
         }
         img {
-            max-height: 150px;
+            max-height: 100px;
             margin-bottom: -4px;
         }
         .hidden {
@@ -62,8 +62,7 @@
         }
         .synopsis {
             vertical-align: top;
-            padding-top: 30px;
-            padding-left: 20px;
+            padding: 12px;
         }
         .synopsis-text {
             text-decoration: none;
@@ -111,7 +110,7 @@
             padding: 7px 17px;
             text-decoration: none;
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 2px;
         }
         .bottom-links .imdb-link {
             background: #ffd8d8;
@@ -312,32 +311,33 @@
             </tr>
             <tr v-for="(item, index) in items">
                 <td class="center">
-                    <a :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'">
+                    <a target="_blank" :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'">
                         <div class="img-wrap">
                             <img :src="item.thumbnailHigh"/>
                         </div>
                     </a>
                 </td>
                 <td class="synopsis">
-                    <div style="margin-bottom: 15px;">
-                        <a class="ch-title" :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'">
+                    <div style="margin-bottom: 7px;">
+                        <a class="ch-title" target="_blank" :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'">
                             <span style="color: #ff6a6a; margin-right: 8px; ">{{index+1}}. </span>
                             {{item.title}}
                             <!--                        <span style="font-size: 15px;font-weight: 300;margin-left: 10px;font-style: italic;color: #ff5555;"># {{item.topicCategories}}</span>-->
                         </a>
                     </div>
 
-                    <a class="synopsis-text" :href="item.url" v-if="item.description">
+                    <a class="synopsis-text" :href="item.url" target="_blank" v-if="item.description">
                         {{shortenText(item.description, 200)}}
                     </a>
-                    <a class="synopsis-text" :href="item.url" v-if="!item.description" style="color: gray;">
+                    <a class="synopsis-text" :href="item.url" target="_blank" v-if="!item.description" style="color: gray;">
                         Description not available
                     </a>
                 </td>
                 <td class="center">
-                    <div class="mb"><strong><span class="sorter" @click="sort('viewCount')" :class="{desc: sortBy === 'viewCount'}"  title="Click to sort by">Views: </span></strong>{{parseInt(item.viewCount) | prettyNumbers}} <br></div>
+<!--                    <div class="mb"><strong><span class="sorter" @click="sort('viewCount')" :class="{desc: sortBy === 'viewCount'}"  title="Click to sort by">Views: </span></strong>{{parseInt(item.viewCount) | prettyNumbers}} <br></div>-->
                     <div class="mb"><strong><span class="sorter" @click="sort('subscriberCount')" :class="{desc: sortBy === 'subscriberCount'}"  title="Click to sort by">Subscribers: </span></strong>{{parseInt(item.subscriberCount) | prettyNumbers}} <br></div>
-                    <div class="mb"><strong><span class="sorter" @click="sort('videoCount')" :class="{desc: sortBy === 'videoCount'}"  title="Click to sort by">Videos: </span></strong>{{parseInt(item.videoCount) | prettyNumbers}} <br></div>
+                    <div class="mb"><strong><span class="sorter" @click="sort('subscriberCount')" :class="{desc: sortBy === 'subscriberCount'}"  title="Click to sort by">Videos with CC: </span></strong>10% <br></div>
+<!--                    <div class="mb"><strong><span class="sorter" @click="sort('videoCount')" :class="{desc: sortBy === 'videoCount'}"  title="Click to sort by">Videos: </span></strong>{{parseInt(item.videoCount) | prettyNumbers}} <br></div>-->
                     <a class="watch-link" :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'" target="_blank">
                         Watch
                         <span style="margin-left: 10px;">▶</span>
