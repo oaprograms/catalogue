@@ -40,14 +40,15 @@
             border-collapse: collapse;
         }
         td, th {
-            padding: 10px;
+            padding: 5px;
         }
         .img-wrap {
-            min-height: 200px;
+            min-height: 150px;
             min-width: 1px;
         }
         img {
-            max-height: 200px;
+            max-height: 150px;
+            margin-bottom: -4px;
         }
         .hidden {
             display: none;
@@ -104,7 +105,7 @@
             margin-top: 30px;
             text-align: right;
         }
-        .bottom-links a {
+        .watch-link {
             margin: 0 0 0 10px;
             background: #ff6a6a;
             color: white;
@@ -121,7 +122,7 @@
             font-weight: 900;
         }
         .mb {
-            margin-bottom: 15px;
+            margin-bottom: 5px;
         }
         .small {
             font-size: .8em;
@@ -309,7 +310,8 @@
         <table v-if="items.length" v-cloak style="max-width: 100%;">
             <tr>
                 <th>Image</th>
-                <th>Title &amp; Description</th>
+                <th>Name &amp; Description</th>
+                <th style="min-width: 230px;">Info</th>
             </tr>
             <tr v-for="item in items">
                 <td class="center">
@@ -322,20 +324,26 @@
                 <td class="synopsis">
                     <a class="title" :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'">
                         {{item.title}}
-                        <span style="font-size: 15px;font-weight: 300;margin-left: 10px;font-style: italic;color: #ff5555;"># {{item.topicCategories}}</span>
+                        <!--                        <span style="font-size: 15px;font-weight: 300;margin-left: 10px;font-style: italic;color: #ff5555;"># {{item.topicCategories}}</span>-->
                     </a>
                     <a class="synopsis-text" :href="item.url" v-if="item.description">
-                        {{item.description}}
+                        {{shortenText(item.description, 200)}}
                     </a>
                     <a class="synopsis-text" :href="item.url" v-if="!item.description" style="color: gray;">
                         Description not available
                     </a>
-                    <div class="bottom-links" style="text-align: right; margin-right: 20px;">
-                        <a :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'" target="_blank">
-                            Watch on Youtube
-                            <span style="margin-left: 10px;">▶</span>
-                        </a>
-                    </div>
+                </td>
+                <td class="center">
+                    <div class="mb"><strong><span class="sorter" @click="sort('viewCount')" :class="{desc: sortBy === 'viewCount'}"  title="Click to sort by">Views: </span></strong>{{parseInt(item.viewCount) | prettyNumbers}} <br></div>
+                    <div class="mb"><strong><span class="sorter" @click="sort('subscriberCount')" :class="{desc: sortBy === 'subscriberCount'}"  title="Click to sort by">Subscribers: </span></strong>{{parseInt(item.subscriberCount) | prettyNumbers}} <br></div>
+                    <div class="mb"><strong><span class="sorter" @click="sort('videoCount')" :class="{desc: sortBy === 'videoCount'}"  title="Click to sort by">Videos: </span></strong>{{parseInt(item.videoCount) | prettyNumbers}} <br></div>
+                    <a class="watch-link" :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'" target="_blank">
+                        Watch
+                        <span style="margin-left: 10px;">▶</span>
+                    </a>
+                    <!--                    <div class="mb"><strong>Category: </strong>{{(item.topicCategories || '').split(',')[0]}}</div>-->
+
+                    <!--                    <div class="mb"><strong>Runtime: </strong>{{movie.runtime}}</div>-->
                 </td>
             </tr>
         </table>
@@ -350,6 +358,31 @@
     (function(){
         'use strict';
         Vue.component('vue-multiselect', window.VueMultiselect.default);
+        Vue.filter('prettyNumbers', function (num) {
+            // jacked from: https://github.com/sindresorhus/pretty-bytes
+            if (typeof num !== 'number' || isNaN(num)) {
+                return num;
+            }
+
+            var exponent;
+            var unit;
+            var neg = num < 0;
+            var units = ['', 'K', 'M', ' billion', ' million million', 'million billion'];
+
+            if (neg) {
+                num = -num;
+            }
+
+            if (num < 1) {
+                return (neg ? '-' : '') + num + ' B';
+            }
+
+            exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), units.length - 1);
+            num = (num / Math.pow(1000, exponent)).toFixed(2) * 1;
+            unit = units[exponent];
+
+            return (neg ? '-' : '') + num + ' ' + unit;
+        });
         new Vue({
             el: '#app',
             data: {
@@ -474,6 +507,19 @@
                 this.loadLanguageCountry();
             },
             methods: {
+                shortenText: function(text, goalLength) {
+                    // cut off text at spaces
+                    let txt = text.split(' ');
+                    let lenCount = 0;
+                    for (let i = 0; i < txt.length; i++) {
+                        if (lenCount + txt[i].length <= goalLength) {
+                            lenCount += txt[i].length + 1;
+                        } else {
+                            return txt.slice(0, i).join(' ') + '...';
+                        }
+                    }
+                    return txt.join(' ');
+                },
                 loadLanguageCountry: function() {
                     let that = this;
                     this.items = [];
