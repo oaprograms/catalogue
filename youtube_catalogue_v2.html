@@ -53,11 +53,10 @@
         .hidden {
             display: none;
         }
-        .title {
+        .ch-title {
             font-size: 1.15em;
             font-weight: bold;
             text-decoration: none;
-            display: block;
             margin-bottom: 20px;
             color: black;
         }
@@ -106,7 +105,6 @@
             text-align: right;
         }
         .watch-link {
-            margin: 0 0 0 10px;
             background: #ff6a6a;
             color: white;
             border-radius: 3px;
@@ -114,7 +112,6 @@
             text-decoration: none;
             display: inline-block;
             margin-top: 10px;
-            margin-bottom: 10px;
         }
         .bottom-links .imdb-link {
             background: #ffd8d8;
@@ -322,11 +319,14 @@
                     </a>
                 </td>
                 <td class="synopsis">
-                    <a class="title" :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'">
-                       <span style="color: #bbb; margin-right: 8px; ">{{index+1}}. </span>
-                        {{item.title}}
-                        <!--                        <span style="font-size: 15px;font-weight: 300;margin-left: 10px;font-style: italic;color: #ff5555;"># {{item.topicCategories}}</span>-->
-                    </a>
+                    <div style="margin-bottom: 15px;">
+                        <a class="ch-title" :href="'https://www.youtube.com/channel/' + item.id + '/videos?view=0&sort=p&flow=grid'">
+                            <span style="color: #ff6a6a; margin-right: 8px; ">{{index+1}}. </span>
+                            {{item.title}}
+                            <!--                        <span style="font-size: 15px;font-weight: 300;margin-left: 10px;font-style: italic;color: #ff5555;"># {{item.topicCategories}}</span>-->
+                        </a>
+                    </div>
+
                     <a class="synopsis-text" :href="item.url" v-if="item.description">
                         {{shortenText(item.description, 200)}}
                     </a>
