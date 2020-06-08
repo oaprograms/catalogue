@@ -370,7 +370,7 @@
                     this.sortBy = '';
                     this.loading = true;
                     this.setHashValue('language', this.language);
-                    fetch("https://storage.googleapis.com/lln-catalogue/youtube-catalog.json").then(function(r){
+                    fetch("https://extension.dioco.io/catalogue/youtube-catalog.json").then(function(r){
                         return r.json();
                     }).then(function(json){
                         that.items = json.filter(item => item.language === that.language);
