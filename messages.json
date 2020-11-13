@@ -1,10 +1,10 @@
 {
   "YOUTUBE": {
-    "message": "",
-    "color": "red",
-    "link": "http://languagelearningwithnetflix.com/",
-    "showErrorIcon": true,
-    "showNewIcon": false
+    "message": "Hi. We are looking for a software developer:",
+    "color": "#fcc283",
+    "link": "https://cutt.ly/qg1uQyT",
+    "showErrorIcon": false,
+    "showNewIcon": true
   },
   "NETFLIX": { 
     "message": "Hi. We are looking for a software developer:",
