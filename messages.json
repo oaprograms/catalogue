@@ -1,7 +1,7 @@
 {
   "YOUTUBE": {
     "message": "Hi. We are looking for a software developer:",
-    "color": "#fcc283",
+    "color": "rgb(180 98 9)",
     "link": "https://cutt.ly/qg1uQyT",
     "showErrorIcon": false,
     "showNewIcon": true
