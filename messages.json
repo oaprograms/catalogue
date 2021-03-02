@@ -1,13 +1,13 @@
 {
   "YOUTUBE": {
-    "message": "Hi. We are looking for a software developer:",
+    "message": "",
     "color": "#21a2eb",
     "link": "https://cutt.ly/qg1uQyT",
     "showErrorIcon": false,
     "showNewIcon": true
   },
   "NETFLIX": { 
-    "message": "Hi. We are looking for a software developer:",
+    "message": "",
     "color": "rgb(180 98 9)",
     "link": "https://cutt.ly/qg1uQyT",
     "showErrorIcon": false,
