@@ -9,7 +9,7 @@
   "NETFLIX": { 
     "message": "Netflix has updated code, Language Reactor is being repaired! Stand by.",
     "color": "#4d0001",
-    "link": "https://cutt.ly/qg1uQyT",
+    "link": "",
     "showErrorIcon": true,
     "showNewIcon": false
   }
