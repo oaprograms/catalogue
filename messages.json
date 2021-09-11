@@ -8,7 +8,7 @@
   },
   "NETFLIX": { 
     "message": "Netflix has updated code, Language Reactor is being repaired!",
-    "color": "#333",
+    "color": "#222",
     "link": "",
     "showErrorIcon": true,
     "showNewIcon": false
